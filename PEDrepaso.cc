@@ -423,9 +423,104 @@ int main() {
 :sparkles: introducir nuevas caracteristicas
 :rocket: implementar cosas
  */
+#include <iostream>
+#include <cstring>
+
+const int MAX_TAMANO_NOMBRE = 100;
+
+struct Miembro {
+    char first_name[MAX_TAMANO_NOMBRE];
+    char last_name[MAX_TAMANO_NOMBRE];
+    int age;
+    Miembro* next; // Puntero al siguiente miembro
+};
+
+struct Club {
+    char name[MAX_TAMANO_NOMBRE];
+    char creation_date[MAX_TAMANO_NOMBRE];
+    int max_capacity;
+    Miembro* miembros; // Puntero a la lista de miembros
+    Club* next; // Puntero al siguiente club
+};
+
+Club* clubs = nullptr; // Puntero a la lista de clubes
 
 
+void CreateClub() {
+    Club* new_club = new Club;
+    std::cout << "Escribe el nombre del club: ";
+    std::cin.getline(new_club->name, MAX_TAMANO_NOMBRE);
+    std::cout << "Ingrese la fecha de creacion del club: ";
+    std::cin.getline(new_club->creation_date, MAX_TAMANO_NOMBRE);
+    std::cout << "Ingresa la capacidad maxima del club: ";
+    std::cin >> new_club->max_capacity;
+    std::cin.ignore();
+    new_club->miembros = nullptr; // Inicializar la lista de miembros
+    new_club->next = clubs; // Insertar al inicio de la lista
+    clubs = new_club; // Actualizar el puntero de clubes
+    std::cout << "Club creado." << std::endl;
+}
 
+void ListClubs() {
+    if (!clubs) {
+        std::cout << "No hay clubs registrados." << std::endl;
+        return;
+    }
+    std::cout << "Clubs registrados:" << std::endl;
+    Club* current = clubs;
+    int index = 1;
+    while (current) {
+        std::cout << index++ << ". " << current->name << std::endl;
+        std::cout << "Creado el: " << current->creation_date << std::endl;
+        std::cout << "Capacidad: " << current->max_capacity << std::endl;
+        current = current->next;
+    }
+}
 
+void RegisterMember(Club* club) {
+    if (!club) return;
+
+    Miembro* new_member = new Miembro;
+    std::cout << "Ingrese el nombre del miembro: ";
+    std::cin.getline(new_member->first_name, MAX_TAMANO_NOMBRE);
+    std::cout << "Ingrese el apellido del miembro: ";
+    std::cin.getline(new_member->last_name, MAX_TAMANO_NOMBRE);
+    std::cout << "Ingrese la edad del miembro: ";
+    std::cin >> new_member->age;
+    std::cin.ignore(); // Limpiar el buffer
+
+    // Insertar el nuevo miembro al inicio de la lista de miembros
+    new_member->next = club->miembros;
+    club->miembros = new_member;
+
+    std::cout << "Miembro registrado." << std::endl;
+}
+
+void ListMembers(Club* club) {
+    if (!club || !club->miembros) {
+        std::cout << "No hay miembros registrados en este club." << std::endl;
+        return;
+    }
+
+    std::cout << "Miembros en el club " << club->name << ":" << std::endl;
+    Miembro* current = club->miembros;
+    while (current) {
+        std::cout << "- " << current->first_name << " " << current->last_name 
+                  << " (Edad: " << current->age << ")" << std::endl;
+        current = current->next;
+    }
+}
+
+void TotalMembers(Club* club) {
+    if (!club) return;
+
+    int count = 0;
+    Miembro* current = club->miembros;
+    while (current) {
+        count++;
+        current = current->next;
+    }
+    std::cout << "Total de miembros en el club " << club->name << ": " << count << std::endl;
+}
 
 
