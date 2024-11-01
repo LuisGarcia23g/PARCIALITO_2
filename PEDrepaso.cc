@@ -1,4 +1,41 @@
-#include <iostream>
+/*
+1. git clone 
+2. cd (tabulador)
+3. git config --local user.name "nombre"
+4. git config --local user.email "email"
+5. git flow init 
+6. code .
+7. git flow feature start "nombre"
+8. git add main.cc
+9. git commit -m "feat: agregando"
+10. git push origin feature "nombre"
+11. git flow feature finish
+12. git push origin develop 
+13. git flow feature start (otra rama)
+14. git pull origin develop
+15. code .
+16. git add main.cc
+17. git commit -m "feat: agregando"
+18. git push origin feature "nombre"
+19. git flow feature finish
+20. git push origin develop 
+21. git flow release start v1.0
+22. git flow release finish v1.0
+23. esc i : wq!
+24. git push origin main
+
+
+---cuando las ramas divergen---
+1. git checkout develop 
+2. git pull 
+3. git pull origin develop 
+4. git checkout (rama en la que estamos)*/
+
+
+
+//---PARCIAL 1---
+/* #include <iostream>
+
 
 const int MAX_TAMANO_NOMBRE = 50;
 const int MAX_MIEMBROS = 100;
@@ -182,4 +219,213 @@ void ListMembers(const Club& club){
 void TotalMembers(const Club& club){
     std::cout << "Total de miembros en el club " << club.name << ": "
               << club.num_miembros << std::endl;
+}*/
+
+
+//---LISTAS SIMPLES---
+/*#include <iostream>
+
+struct Nodo {
+    int dato;
+    Nodo* siguiente;
+};
+
+void InsertarLista(Nodo *&lista, int numero){ //Se pasa por referencia para que la lista se modifique
+    Nodo *nuevo_nodo = new Nodo(); //Reservar memoria para el nuevo nodo
+    Nodo *aux; //Puntero auxiliar para recorrer la lista
+
+    nuevo_nodo->dato = numero; //Asignar el valor al nuevo nodo
+    nuevo_nodo->siguiente = nullptr; //Asignar el siguiente del nuevo nodo a nullptr
+
+    if(lista == nullptr){ //Si la lista esta vacia
+        lista = nuevo_nodo; //Asignar el nuevo nodo a la lista
+    }else{
+        aux = lista; //Asignar el puntero auxiliar a la lista
+        while(aux->siguiente != nullptr){ //Recorrer la lista para que el puntero auxiliar quede en el ultimo nodo
+            aux = aux->siguiente; //Avanza al siguiente nodo
+        }
+        aux->siguiente = nuevo_nodo; //Cuando llega al ultimo nodo, asigna el nuevo nodo
+    }
+
+    std::cout << "Elemento " << numero << " insertado a la lista" << std::endl;
+
+    // No debes liberar la memoria aquí
+    // delete nuevo_nodo; // Esta línea debe ser eliminada
 }
+
+void MostrarLista(Nodo *lista){
+   while(lista != nullptr){ //Mientras no sea el final de la lista
+       std::cout << lista->dato << " -> "; //Mostrar el dato del nodo
+       lista = lista->siguiente; //Avanzar al siguiente nodo
+   }
+   std::cout << "nullptr" << std::endl; // Para indicar el final de la lista
+}
+
+void CalcularMayorMenor(Nodo *lista){ //No se pasa por referencia porque no se modifica la lista
+    if (lista == nullptr) {
+        std::cout << "La lista está vacía." << std::endl;
+        return; // Si la lista está vacía, no hay que calcular mayor y menor
+    }
+
+    int mayor = lista->dato; // Inicializar mayor con el primer elemento
+    int menor = lista->dato; // Inicializar menor con el primer elemento
+
+    while(lista != nullptr){ //Mientras no sea el final de la lista
+        if(lista->dato > mayor){ //Calculando el mayor
+            mayor = lista->dato;
+        }
+        if(lista->dato < menor){ //Calculando el menor
+            menor = lista->dato;
+        }
+
+        lista = lista->siguiente; //Avanzar al siguiente nodo
+    }
+
+    std::cout << "Mayor: " << mayor << std::endl;
+    std::cout << "Menor: " << menor << std::endl;
+}
+
+int main(){
+    Nodo *lista = nullptr;
+    int dato;
+    char respuesta;
+
+    do{
+        std::cout << "Digite un numero: ";
+        std::cin >> dato;
+        InsertarLista(lista, dato);  
+
+        std::cout << "Desea agregar otro elemento a la lista? (s/n): ";
+        std::cin >> respuesta;
+
+    }while(respuesta == 's' || respuesta == 'S');
+
+    std::cout << "Elementos de la lista: ";
+    MostrarLista(lista);
+
+    std::cout << "El mayor y menor elemento de la lista son: ";
+    std::cout << std::endl;
+    CalcularMayorMenor(lista);
+
+    // Liberar la memoria de la lista al final
+    while (lista != nullptr) {
+        Nodo *temp = lista;
+        lista = lista->siguiente;
+        delete temp;
+    }
+
+    return 0;
+}*/
+
+
+//---PILAS---
+/*#include <iostream>
+#include <stack>
+
+// Función para solicitar al usuario los valores para apilar
+void IngresarValores(std::stack<int>& pila) {
+    int valor;
+    std::cout << "Ingrese los valores para apilar (0 para terminar): " << std::endl;
+    
+    while (true) {
+        std::cout << "Valor: ";
+        std::cin >> valor;
+        if (valor == 0) break;
+        pila.push(valor);  // Apilando el valor
+    }
+}
+
+// Función para mostrar todos los elementos de la pila sin modificarla
+void MostrarPila(std::stack<int> pila) {
+    if (pila.empty()) {
+        std::cout << "La pila está vacía." << std::endl;
+        return;
+    }
+
+    std::cout << "Elementos en la pila: ";
+    while (!pila.empty()) {
+        std::cout << pila.top() << " ";  // Muestra el elemento en la cima
+        pila.pop();                      // Elimina el elemento de la cima
+    }
+    std::cout << std::endl;
+}
+
+// Función para eliminar el elemento en la cima de la pila
+void EliminarElemento(std::stack<int>& pila) {
+    if (!pila.empty()) {
+        std::cout << "Cima de la pila: " << pila.top() << std::endl;
+        pila.pop();
+        std::cout << "Se ha eliminado el elemento de la cima." << std::endl;
+    } else {
+        std::cout << "La pila está vacía, no hay nada que eliminar." << std::endl;
+    }
+}
+
+int main() {
+    std::stack<int> pila;
+
+    // Llamar a la función para ingresar los valores
+    IngresarValores(pila);
+
+    // Llamar a la función para mostrar los valores de la pila
+    std::cout << "Mostrando la pila:" << std::endl;
+    MostrarPila(pila);
+
+    // Llamar a la función para eliminar el elemento en la cima de la pila
+    std::cout << "Eliminando el elemento de la cima:" << std::endl;
+    EliminarElemento(pila);
+
+    // Mostrar pila después de eliminar
+    std::cout << "Mostrando la pila despues de eliminar el elemento de la cima:" << std::endl;
+    MostrarPila(pila);
+
+    return 0;
+}*/
+
+//---COLAS---
+/*#include <algorithm>
+#include <iostream>
+
+int main() {
+    int n;
+
+    std::cout << "Ingrese el numero de elementos que desea ordenar: ";
+    std::cin >> n;
+
+    // Crear un arreglo dinámico
+    int* arr = new int[n];
+
+    std::cout << "Ingrese los elementos del arreglo:\n";
+    for (int i = 0; i < n; i++) {
+        std::cout << "Elemento " << i + 1 << ": ";
+        std::cin >> arr[i];
+    }
+
+    std::sort(arr, arr + n);
+
+    std::cout << "Arreglo ordenado: ";
+    for (int i = 0; i < n; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Liberar la memoria del arreglo dinámico
+    delete[] arr;
+
+    return 0;
+}*/
+
+
+//---EMOJIS---
+/*
+:white_check_mark: agregar, actualizar o aprobar pruebas
+:bug: arreglar un error
+:sparkles: introducir nuevas caracteristicas
+:rocket: implementar cosas
+ */
+
+
+
+
+
+
